@@ -246,7 +246,7 @@ Example queries:
 4. Test thoroughly
 5. Submit pull request
 
-## Usage Examples
+## Usage Example- Screenshots
 ![Usage Example1](./assets/claudemcptools.png)
 ![Usage Example2](./assets/claudechatexample1.png)
 ![Usage Example3](./assets/claudechatexample1-cont.png)
