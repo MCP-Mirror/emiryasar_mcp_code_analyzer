@@ -31,7 +31,7 @@ A Model Context Protocol (MCP) server implementation for comprehensive code anal
 ## Prerequisites
 - Python 3.10 or later
 - Windows/Linux/MacOS
-
+[README.md](README.md)
 ## Installation
 
 ### Local Installation
@@ -246,21 +246,11 @@ Example queries:
 4. Test thoroughly
 5. Submit pull request
 
-## Project Structure
-```
-mcp-code-analyzer/
-├── .github/
-│   └── workflows/
-├── docs/
-├── tests/
-├── mcp_code_analyzer/
-│   ├── __init__.py
-│   └── server.py
-├── .gitignore
-├── LICENSE
-├── README.md
-└── pyproject.toml
-```
-
+## Usage Examples
+![Usage Example1](./assets/claudemcptools.png)
+![Usage Example2](./assets/claudechatexample1.png)
+![Usage Example3](./assets/claudechatexample1-cont.png)
+  
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+ 
