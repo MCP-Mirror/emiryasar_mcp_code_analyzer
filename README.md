@@ -82,9 +82,13 @@ pip install -e .
 1. Chat context limitations may interrupt large file modifications
 2. AI-generated documentation comments can affect code operation in large files
 
-## Usage Examples
-[Coming Soon: Video demonstrations will be added showing tool usage and common workflows]
- 
+## Demo Video
+Watch demonstration of MCP tool using with building Mario game:
+[![Mario Game with Claude | MCP Code Analyzer Tool Demonstration](https://img.youtube.com/vi/MQtZCKNg13I/0.jpg)](https://youtu.be/MQtZCKNg13I)
+
+
+Note: This is a demonstration of the tool's capabilities, not a complete game tutorial. While the game isn't fully playable due to Claude's message limits, this video shows how the MCP tool works and what you can do with it.
+
 ## Contributing
 Contributions are welcome! Whether it's bug reports, feature requests, documentation improvements, or code contributions - every contribution helps. Simply fork the repository and submit a pull request.
 
