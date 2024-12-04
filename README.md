@@ -1,5 +1,4 @@
-# MCP Code Analyzer 
-
+# MCP Code Analyzer
 If you find this project helpful, please consider giving it a ⭐ star on GitHub to make it more visible to others! Thank you for your support!
 
 ⚠️ **WARNING: BACKUP RECOMMENDED**  
