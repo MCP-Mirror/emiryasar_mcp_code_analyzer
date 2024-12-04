@@ -1,4 +1,6 @@
-# MCP Code Analyzer
+# MCP Code Analyzer 
+
+If you find this project helpful, please consider giving it a ⭐ star on GitHub to make it more visible to others! Thank you for your support!
 
 ⚠️ **WARNING: BACKUP RECOMMENDED**  
 This tool performs file operations that could potentially modify or delete files. Always backup your codebase before using any modification features.
