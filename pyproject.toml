@@ -1,5 +1,5 @@
 [project]
-name = "mcp-code-analyzer"  # mcp-server prefix'ini kaldırdım
+name = "mcp-code-analyzer"
 version = "0.1.0"
 description = "A code analysis tool using Model Context Protocol"
 readme = "README.md"
@@ -13,7 +13,7 @@ dependencies = [
 ]
 
 [project.scripts]
-mcp-code-analyzer = "mcp_code_analyzer:main"  # komut adını da değiştirdim
+mcp-code-analyzer = "mcp_code_analyzer:main"
 
 [build-system]
 requires = ["hatchling"]
@@ -21,3 +21,32 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["mcp_code_analyzer"]
+
+[tool.ruff]
+select = ["E", "F", "B", "I"]
+ignore = ["E501"]
+target-version = "py310"
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401"]
+
+[tool.black]
+line-length = 88
+target-version = ["py310"]
+include = '\.pyi?$'
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+check_untyped_defs = true
+
+[project.urls]
+Homepage = "https://github.com/yourusername/mcp-code-analyzer"
+Issues = "https://github.com/yourusername/mcp-code-analyzer/issues"

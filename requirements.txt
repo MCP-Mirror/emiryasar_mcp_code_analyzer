@@ -1,0 +1,6 @@
+chardet~=5.2.0
+astroid~=3.3.5
+pydantic~=2.10.2
+radon~=6.0.1
+networkx~=3.4.2
+mcp~=1.0.0
