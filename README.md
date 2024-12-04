@@ -1,40 +1,16 @@
 # MCP Code Analyzer
 
+⚠️ **WARNING: BACKUP RECOMMENDED**  
+This tool performs file operations that could potentially modify or delete files. Always backup your codebase before using any modification features.
+
 ## Overview
-A Model Context Protocol (MCP) server implementation for comprehensive code analysis. This tool integrates with Claude Desktop to provide code analysis capabilities through natural language interactions.
-
-## 🚧 Project Status
-
-### Working Features
-- **analyze_project**: Project structure and basic analysis
-- **analyze_structure**: Directory and file organization analysis
-
-### Needs Testing (Expected to Work)
-- analyze_file
-- analyze_pattern_dependencies
-- suggest_refactoring
-- preview_changes
-- find_references
-- analyze_code_structure
-- analyze_imports
-- analyze_file_dependencies
-- find_pattern_usages
-- analyze_dependencies
-- check_code_quality
-- find_code_patterns
-
-### Known Issues
-⚠️ **Path Resolution Inconsistencies:**
-- Intermittent issues between chat and config paths
-- Workaround: Try both methods if one fails
+The Model Context Protocol (MCP) Code Analyzer is a comprehensive code analysis and management tool that integrates with Claude Desktop. It analyzes code at both project and file levels, providing insights for needed changes and project understanding.
 
 ## Prerequisites
 - Python 3.10 or later
-- Windows/Linux/MacOS
-[README.md](README.md)
-## Installation
+- Windows (Linux/MacOS support not yet tested)
 
-### Local Installation
+## Installation
 ```bash
 # Clone the repository
 git clone https://github.com/[your-username]/mcp-code-analyzer.git
@@ -46,7 +22,7 @@ pip install -e .
 
 ## Claude Desktop Integration
 
-### Configuration Setup
+### Configuration
 1. Access Claude Desktop config:
    ```
    Win + R → %AppData%\Claude\
@@ -59,198 +35,61 @@ pip install -e .
        "code-analyzer": {
          "command": "python",
          "args": [
-           "-c",
-           "import sys; sys.argv = ['', '--path', 'C:\\Projects\\YourProject\\src']; from mcp_code_analyzer import main; main()"
-         ]
+           "-m",
+           "mcp_code_analyzer",
+           "--analyze-paths",
+           "C:\\Projects\\path1",
+           "C:\\Projects\\path2"
+         ],
+         "type": "module"
        }
      }
    }
    ```
 
-## Detailed Tool Documentation
+### Path Configuration
+- Multiple project paths can be specified in configuration
+- Additional paths or files can be analyzed via chat messages
+- No limit on number of analyzable paths/files
+
+## 🛠️ Tools and Status
 
 ### Working Tools
+- ✅ **Project Analysis**
+    - analyze_project_structure (XML tree format)
+    - analyze_project_statistics
+    - analyze_project_technology
+    - analyze_code_structure
 
-1. `analyze_project`
-   - ✅ Tested and Working
-   - **Purpose**: Complete project structure and code analysis
-   - **Input**: Optional project path
-   - **Returns**: Comprehensive analysis results including:
-     - Project structure
-     - File organization
-     - Basic metrics
+- ✅ **Code Analysis**
+    - analyze_imports
+    - analyze_file
+    - find_references
 
-2. `analyze_structure`
-   - ✅ Tested and Working
-   - **Purpose**: Directory and file organization analysis
-   - **Input**: Project path
-   - **Returns**: Detailed structure analysis including:
-     - Directory hierarchy
-     - File distribution
-     - File types
-     - Size statistics
+- ⚠️ **File Operations** (Always backup before use)
+    - file_operations
+    - version_control (Creates dated backups)
 
-### Tools Needing Testing
+### Testing Phase
+- 🔄 check_syntax
+- 🔄 find_code_patterns
+- 🔄 find_pattern_usages
+- 🔄 search_content
+- 🔄 search_files
+- 🔄 validate_code
 
-3. `analyze_file`
-   - **Purpose**: Detailed single file analysis
-   - **Returns**: 
-     - Code metrics
-     - Complexity measures
-     - Quality indicators
+### Known Issues
+1. Chat context limitations may interrupt large file modifications
+2. AI-generated documentation comments can affect code operation in large files
 
-4. `analyze_pattern_dependencies`
-   - **Purpose**: Pattern dependency analysis
-   - **Returns**: 
-     - Direct dependencies
-     - Indirect dependencies
-     - Usage patterns
-
-5. `suggest_refactoring`
-   - **Purpose**: Refactoring suggestions
-   - **Returns**: 
-     - Code changes
-     - Impact analysis
-     - Risk assessment
-
-6. `preview_changes`
-   - **Purpose**: Preview refactoring impact
-   - **Returns**: 
-     - Modified files
-     - Before/after comparisons
-     - Potential risks
-
-7. `find_references`
-   - **Purpose**: Find all code references
-   - **Returns**: 
-     - File locations
-     - Usage context
-     - Reference types
-
-8. `analyze_code_structure`
-   - **Purpose**: Code structure analysis
-   - **Returns**: 
-     - Code organization
-     - Component relationships
-     - Architecture patterns
-
-9. `analyze_imports`
-   - **Purpose**: Import statement analysis
-   - **Returns**: 
-     - Import patterns
-     - Dependency chains
-     - Unused imports
-
-10. `analyze_file_dependencies`
-    - **Purpose**: Single file dependency analysis
-    - **Returns**: 
-      - Module dependencies
-      - Class dependencies
-      - Function dependencies
-
-11. `find_pattern_usages`
-    - **Purpose**: Find pattern occurrences
-    - **Returns**: 
-      - Locations
-      - Usage context
-      - Frequency analysis
-
-12. `analyze_dependencies`
-    - **Purpose**: Project-wide dependency analysis
-    - **Returns**: 
-      - Dependency graph
-      - Circular dependencies
-      - Module relationships
-
-13. `check_code_quality`
-    - **Purpose**: Code quality assessment
-    - **Returns**: 
-      - Code complexity
-      - Maintainability index
-      - Code smells
-
-14. `find_code_patterns`
-    - **Purpose**: Detect code patterns
-    - **Returns**: 
-      - Common patterns
-      - Anti-patterns
-      - Design patterns
-
-## Usage in Claude Chat
-
-The analyzer automatically responds to natural language queries in the Claude chat. Simply describe what you want to analyze, and the appropriate tool will be invoked.
-
-Example queries:
-```
-"Analyze the code in C:\Projects\MyProject"
-"Show me the structure of this project"
-"What's the quality of code in this folder?"
-"Find patterns in this codebase"
-```
-
-## Troubleshooting
-
-### Log Access
-1. Open log directory:
-   ```
-   Win + R → %AppData%\Claude\logs
-   ```
-2. Check recent log files for errors
-
-### Common Issues
-1. **Path Not Found**
-   - Verify path exists
-   - Check path format in config
-   - Try both relative and absolute paths
-
-2. **Import Errors**
-   - Confirm Python 3.10+ installation
-   - Verify package installation
-   - Check dependency installations
-
-3. **Connection Issues**
-   - Restart Claude Desktop
-   - Check server process
-   - Verify config syntax
-
-4. **Path Resolution**
-   - Try both config and chat paths
-   - Use forward slashes in chat
-   - Use double backslashes in config
-
-## Contributing
-
-### Priority Areas
-1. Tool Testing
-   - Validate untested features
-   - Add integration tests
-   - Create test documentation
-
-2. Documentation
-   - Usage examples
-   - API documentation
-   - Configuration guides
-
-3. Performance
-   - Optimization opportunities
-   - Memory usage improvements
-   - Response time enhancements
-
-### How to Contribute
-1. Fork the repository
-2. Create a feature branch
-3. Install development dependencies:
-   ```bash
-   pip install -e .
-   ```
-4. Test thoroughly
-5. Submit pull request
-
-## Usage Example- Screenshots
-![Usage Example1](./assets/claudemcptools.png)
-![Usage Example2](./assets/claudechatexample1.png)
-![Usage Example3](./assets/claudechatexample1-cont.png)
-  
-## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## Usage Examples
+[Coming Soon: Video demonstrations will be added showing tool usage and common workflows]
  
+## Contributing
+Contributions are welcome! Whether it's bug reports, feature requests, documentation improvements, or code contributions - every contribution helps. Simply fork the repository and submit a pull request.
+
+## License
+This project is licensed under the MIT License - see the [`LICENSE`](LICENSE) file for details.
+
+---
+**Note**: This project is under active development. Features and documentation may change frequently.
