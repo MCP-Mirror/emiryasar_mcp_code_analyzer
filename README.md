@@ -1,5 +1,10 @@
 # MCP Code Analyzer
-If you find this project helpful, please consider giving it a ⭐ star on GitHub to make it more visible to others! Thank you for your support!
+The main purpose of the MCP tool is to adapt changes to the project intelligently. 
+For instance, when a code modification or structural adjustment is needed, it aims to ensure that other related usages are also updated accordingly.
+
+Currently, the project has a lot of bugs, and the tools are not functioning as expected sometimes. Due to work commitments,
+I can’t dedicate much time to it, but I’ll try to fix the issues and bring it to a working state whenever I find the time.
+
 
 ⚠️ **WARNING: BACKUP RECOMMENDED**  
 This tool performs file operations that could potentially modify or delete files. Always backup your codebase before using any modification features.
@@ -39,8 +44,7 @@ pip install -e .
            "-m",
            "mcp_code_analyzer",
            "--analyze-paths",
-           "C:\\Projects\\path1",
-           "C:\\Projects\\path2"
+           "C:\\Projects\\path1"
          ],
          "type": "module"
        }
@@ -67,10 +71,13 @@ pip install -e .
     - analyze_file
     - find_references
 
-- ⚠️ **File Operations** (Always backup before use)
+- ⚠️🔄 **File Operations** (Always backup before use)
     - file_operations
     - version_control (Creates dated backups)
-
+    - 
+- ⚠️🔄 **Code Modify** (Always backup before use)
+  - code_modifier (Performs modifying code line by line)(Currently has big issues) 
+  
 ### Testing Phase
 - 🔄 check_syntax
 - 🔄 find_code_patterns

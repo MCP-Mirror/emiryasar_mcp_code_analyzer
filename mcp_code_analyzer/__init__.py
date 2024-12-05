@@ -21,7 +21,7 @@ from .tools.file_tools import (
     MCPFileOperations,
     FileAnalyzer
 )
-from .tools.modification_tools import CodeModifier, ChangeManager
+from .tools.modification_tools import CodeModifier
 from .tools.search_tools import PathFinder, ContentScanner
 from .tools.version_manager import VersionManager
 
@@ -53,7 +53,6 @@ __all__ = [
 
     # Code Modifications
     "CodeModifier",
-    "ChangeManager",
 
     # Search and Reference
     "PathFinder",

@@ -1,4 +1,5 @@
 import logging
+from enum import Enum
 from typing import Dict, Any, List, Optional
 from pathlib import Path
 import json
@@ -23,6 +24,7 @@ class MCPServer:
         self._setup_handlers()
 
     def _setup_paths(self, analyze_paths: List[str]):
+        """Setup and validate analysis paths"""
         for path in analyze_paths:
             try:
                 path_obj = Path(path)
@@ -41,6 +43,7 @@ class MCPServer:
             self.analyze_paths = [self.base_path]
             logger.warning(f"No valid paths provided, using current directory: {self.base_path}")
 
+
     async def _handle_tool_execution(self, name: str, arguments: Dict[str, Any]) -> Any:
         """Execute tool with enhanced error handling and logging"""
         operation = arguments.get('operation', 'unknown')
@@ -53,6 +56,11 @@ class MCPServer:
             if not path and name in ['create_file', 'stream_edit', 'modify_code']:
                 logger.error(f"No path provided for {name}")
                 return {"error": "Path is required for this operation"}
+
+            # Special handling for code modification
+            if name == "code_modifier":
+                result = await self.tool_manager.execute_tool(name, arguments)
+                return await self._format_modification_result(result)
 
             # Get tool instance
             tool = self.tool_manager.get_tool(name)
@@ -108,6 +116,71 @@ class MCPServer:
             logger.error(f"Error handling tool result: {e}", exc_info=True)
             return [types.TextContent(type="text", text=f"Error processing result: {str(e)}")]
 
+    async def _format_modification_result(self, result: Dict) -> List[types.TextContent]:
+        """Format code modification result"""
+        if "error" in result:
+            return [types.TextContent(type="text", text=json.dumps({
+                "success": False,
+                "error": result["error"]
+            }))]
+
+        # Format successful result
+        formatted_result = {
+            "success": True,
+            "modification": {
+                "backup_path": result.get("backup_path"),
+                "affected_files": len(result.get("affected_code", [])),
+                "dependencies": len(result.get("dependencies", []))
+            }
+        }
+
+        if result.get("affected_code"):
+            formatted_result["details"] = {
+                "affected_code": [
+                    {
+                        "file": code["file_path"],
+                        "reason": code["reason"],
+                        "action": code["suggested_action"]
+                    }
+                    for code in result["affected_code"]
+                ]
+            }
+
+        return [types.TextContent(type="text", text=json.dumps(formatted_result))]
+
+
+    async def _handle_tool_result(self, result: Any) -> List[types.TextContent]:
+        """Handle tool execution result with proper encoding"""
+        try:
+            safe_result = self._convert_to_safe_format(result)
+            encoded_result = self._ensure_utf8(safe_result)
+
+            try:
+                if isinstance(encoded_result, (dict, list)):
+                    result_str = json.dumps(encoded_result, ensure_ascii=False)
+                else:
+                    result_str = str(encoded_result)
+                return [types.TextContent(type="text", text=result_str)]
+            except Exception as json_error:
+                logger.error(f"JSON encoding error: {json_error}")
+                return [types.TextContent(type="text", text=str(encoded_result))]
+
+        except Exception as e:
+            logger.error(f"Error handling tool result: {e}", exc_info=True)
+            return [types.TextContent(type="text", text=f"Error processing result: {str(e)}")]
+
+
+    def _convert_to_safe_format(self, obj: Any) -> Any:
+        """Convert complex objects to JSON-serializable format"""
+        if isinstance(obj, dict):
+            return {k: self._convert_to_safe_format(v) for k, v in obj.items()}
+        elif isinstance(obj, list):
+            return [self._convert_to_safe_format(item) for item in obj]
+        elif isinstance(obj, Enum):
+            return obj.name
+        elif hasattr(obj, '__dict__'):
+            return self._convert_to_safe_format(obj.__dict__)
+        return obj
 
     def _setup_handlers(self):
         """Setup all server handlers"""
@@ -149,7 +222,6 @@ class MCPServer:
         async def handle_list_tools() -> List[types.Tool]:
             """List available analysis tools"""
             return [
-
                 types.Tool(
                     name="analyze_project_structure",
                     description="Directory structure and organization analysis with tree view",
@@ -172,6 +244,7 @@ class MCPServer:
                         "required": ["path"]
                     }
                 ),
+
                 types.Tool(
                     name="analyze_project_technology",
                     description="Detect and analyze used technologies and frameworks",
@@ -206,14 +279,63 @@ class MCPServer:
                     }
                 ),
                 types.Tool(
-                    name="analyze_file",
-                    description="Analyze single file",
+                    name="code_modifier",
+                    description="Safe code modification with impact analysis",
                     inputSchema={
                         "type": "object",
                         "properties": {
-                            "file_path": {"type": "string"}
+                            "file_path": {"type": "string"},
+                            "operation": {
+                                "type": "string",
+                                "enum": ["modify", "insert", "delete"]
+                            },
+                            "section": {
+                                "type": "object",
+                                "properties": {
+                                    "start": {"type": "number"},
+                                    "end": {"type": "number"}
+                                }
+                            },
+                            "content": {"type": "string"},
+                            "description": {"type": "string"}
                         },
-                        "required": ["file_path"]
+                        "required": ["file_path", "operation"]
+                    }
+                ),
+                types.Tool(
+                    name="manage_changes",
+                    description="Manage code changes and their application",
+                    inputSchema={
+                        "type": "object",
+                        "properties": {
+                            "file_path": {"type": "string"},
+                            "operation": {
+                                "type": "string",
+                                "enum": ["apply", "revert", "status", "history"]
+                            },
+                            "change_ids": {
+                                "type": "array",
+                                "items": {"type": "string"}
+                            },
+                            "limit": {"type": "number"}
+                        },
+                        "required": ["file_path", "operation"]
+                    }
+                ),
+                types.Tool(
+                    name="search_code",
+                    description="Search code with pattern matching",
+                    inputSchema={
+                        "type": "object",
+                        "properties": {
+                            "pattern": {"type": "string"},
+                            "search_type": {
+                                "type": "string",
+                                "enum": ["text", "regex", "ast"]
+                            },
+                            "scope": {"type": "string"}
+                        },
+                        "required": ["pattern"]
                     }
                 ),
                 # Code Analysis Tools

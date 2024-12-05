@@ -14,6 +14,7 @@ from .reference_tools import FindReferences, PreviewChanges
 from .project_tools import ProjectStructure, ProjectStatistics, ProjectTechnology
 from .version_manager import VersionManager
 from .search_tools import PathFinder, ContentScanner
+from .modification_tools import CodeModifier
 
 __all__ = [
     "BaseTool",
@@ -33,5 +34,6 @@ __all__ = [
     "PreviewChanges",
     "VersionManager",
     "PathFinder",
-    "ContentScanner"
+    "ContentScanner",
+    "CodeModifier"
 ]
